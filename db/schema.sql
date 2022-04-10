@@ -4,14 +4,14 @@ CREATE DATABASE diving_db;
 
 \c diving_db;
 
--- DOMAINS
+-- Domains
 CREATE DOMAIN UNSIGNED AS INTEGER CHECK (VALUE > 0);
 
 CREATE DOMAIN LATLONG AS POINT
   CHECK (VALUE[0] BETWEEN -90 AND 90)
   CHECK (VALUE[1] BETWEEN -180 AND 180);
 
--- FUNCTIONS
+-- Functions
 CREATE FUNCTION random_between(low INT, high INT)
 RETURNS INT AS $$
 BEGIN
@@ -19,7 +19,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- TABLES
+-- Tables
 CREATE TABLE certifications (
 	id SERIAL PRIMARY KEY,
 	name VARCHAR(50) NOT NULL,
@@ -56,3 +56,7 @@ CREATE TABLE dives (
   diver_id INTEGER NOT NULL REFERENCES divers(id) ON DELETE CASCADE,
   location_id INTEGER NOT NULL REFERENCES locations(id) ON DELETE CASCADE
 );
+
+-- Indexes
+CREATE INDEX diver_index ON dives (diver_id);
+CREATE INDEX location_index ON dives (location_id);
